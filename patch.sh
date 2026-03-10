@@ -19,30 +19,56 @@ trap cleanup EXIT
 echo "==> Extracting app.asar..."
 npx --yes @electron/asar extract "$ASAR_PATH" "$WORK_DIR/app"
 
-# Find Chat-*.js (filename contains hash, use glob)
-CHAT_JS=$(find "$WORK_DIR/app/out/renderer/assets" -name 'Chat-*.js' ! -name '*.css' | head -1)
-if [ -z "$CHAT_JS" ]; then
-  echo "ERROR: Chat-*.js not found"
+ASSETS_DIR="$WORK_DIR/app/out/renderer/assets"
+
+# Find the JS file containing inviteCode logic
+TARGET_JS=$(grep -rl 'inviteCodeVerified\|showInviteCodeModal\|inviteVerified' "$ASSETS_DIR"/ 2>/dev/null | head -1)
+
+# Fallback: try Chat-*.js (v0.1.1)
+if [ -z "$TARGET_JS" ]; then
+  TARGET_JS=$(find "$ASSETS_DIR" -name 'Chat-*.js' ! -name '*.css' | head -1)
+fi
+
+if [ -z "$TARGET_JS" ]; then
+  echo "ERROR: No JS file containing invite verification logic found"
   exit 1
 fi
-echo "==> Found: $(basename "$CHAT_JS")"
+echo "==> Found: $(basename "$TARGET_JS")"
 
-# Patch: set inviteVerified default to true (ref(false) -> ref(true))
-# Original: const i=Z(!1),o=async F=>{var z,W,ue;if(i.value){await F();return}
-# Patched:  const i=Z(!0),o=async F=>{var z,W,ue;if(i.value){await F();return}
-SEARCH='const i=Z(!1),o=async F=>{var z,W,ue;if(i.value){await F();return}'
-REPLACE='const i=Z(!0),o=async F=>{var z,W,ue;if(i.value){await F();return}'
+# Patch using node for reliable cross-line matching
+RESULT=$(node -e "
+const fs = require('fs');
+let code = fs.readFileSync('$TARGET_JS', 'utf8');
 
-if grep -qF "$SEARCH" "$CHAT_JS"; then
-  sed -i '' "s|$(printf '%s' "$SEARCH" | sed 's/[|\\&]/\\&/g; s/!/\\!/g')|$(printf '%s' "$REPLACE" | sed 's/[|\\&]/\\&/g; s/!/\\!/g')|g" "$CHAT_JS"
-  echo "==> Patched: inviteVerified default set to true"
-elif grep -qF "$REPLACE" "$CHAT_JS"; then
-  echo "==> Already patched, skipping"
-else
-  echo "ERROR: Patch pattern not found in $(basename "$CHAT_JS")"
-  echo "       The app version may have changed. Manual inspection needed."
-  exit 1
-fi
+// Match pattern: Z(!1) followed by async function that checks .value and awaits
+// Works across minification styles (with/without newlines)
+const pattern = /(const \w+=Z\()!1(\),\s*\w+=async \w+=>\{var \w+,\w+,\w+;\s*if\(\w+\.value\)\{await \w+\(\);return\})/;
+const patchedCheck = /(const \w+=Z\()!0(\),\s*\w+=async \w+=>\{var \w+,\w+,\w+;\s*if\(\w+\.value\)\{await \w+\(\);return\})/;
+
+if (patchedCheck.test(code)) {
+  console.log('ALREADY_PATCHED');
+} else if (pattern.test(code)) {
+  code = code.replace(pattern, '\$1!0\$2');
+  fs.writeFileSync('$TARGET_JS', code);
+  console.log('PATCHED');
+} else {
+  console.log('NOT_FOUND');
+}
+")
+
+case "$RESULT" in
+  PATCHED)
+    echo "==> Patched: inviteVerified default set to true"
+    ;;
+  ALREADY_PATCHED)
+    echo "==> Already patched, skipping"
+    ;;
+  *)
+    echo "ERROR: Patch pattern not found in $(basename "$TARGET_JS")"
+    echo "       The app version may have changed. Manual inspection needed."
+    exit 1
+    ;;
+esac
 
 echo "==> Repacking app.asar..."
 npx --yes @electron/asar pack "$WORK_DIR/app" "$WORK_DIR/app-patched.asar"
