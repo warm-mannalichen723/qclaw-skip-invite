@@ -4,7 +4,10 @@
     "tagName": "v${version}"
   },
   "npm": {
-    "publish": true
+    "publish": true,
+    "publishConfig": {
+      "registry": "https://registry.npmjs.org/"
+    }
   },
   "github": {
     "release": true
