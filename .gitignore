@@ -4,3 +4,4 @@ qclaw-app-extracted/
 bun.lock
 claude.md
 .claude/
+.npmrc
