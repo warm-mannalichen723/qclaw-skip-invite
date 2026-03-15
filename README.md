@@ -4,7 +4,11 @@
 
 ## 支持
 
-- QClaw v0.1.1 ~ v0.1.3（macOS Apple 芯片 / Intel 芯片）
+- QClaw v0.1.7+（macOS Apple 芯片 / Intel 芯片）
+
+## 前置要求
+
+- Node.js >= 22
 
 ## 使用
 
@@ -16,12 +20,7 @@ npx qclaw-skip-invite
 
 ## 还原
 
-工具会自动备份原始文件，还原只需一行命令：
-
-```bash
-APP_ASAR="/Applications/QClaw.app/Contents/Resources/app.asar"
-cp "$APP_ASAR.bak" "$APP_ASAR"
-```
+重新安装 QClaw 即可还原。
 
 ## 免责声明
 
