@@ -4,7 +4,7 @@
 
 ## 支持
 
-- QClaw v0.1.7+（macOS Apple 芯片 / Intel 芯片）
+- QClaw v0.1.7+（macOS / Windows）
 
 ## 前置要求
 

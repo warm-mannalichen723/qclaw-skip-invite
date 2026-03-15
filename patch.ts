@@ -1,10 +1,31 @@
 import { execSync } from "node:child_process";
-import { readFileSync, writeFileSync, cpSync, mkdtempSync, rmSync, readdirSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { readFileSync, writeFileSync, cpSync, mkdtempSync, rmSync, readdirSync, existsSync } from "node:fs";
+import { tmpdir, platform } from "node:os";
 import { join, basename } from "node:path";
 
-const APP_PATH = "/Applications/QClaw.app";
-const ASAR_PATH = join(APP_PATH, "Contents/Resources/app.asar");
+const isMac = platform() === "darwin";
+const isWin = platform() === "win32";
+
+if (!isMac && !isWin) {
+  console.error("ERROR: Only macOS and Windows are supported.");
+  process.exit(1);
+}
+
+// Resolve paths per platform
+const APP_PATH = isMac
+  ? "/Applications/QClaw.app"
+  : join(process.env.LOCALAPPDATA || "", "Programs/QClaw");
+const ASAR_PATH = isMac
+  ? join(APP_PATH, "Contents/Resources/app.asar")
+  : join(APP_PATH, "resources/app.asar");
+const ELECTRON_BIN = isMac
+  ? join(APP_PATH, "Contents/Frameworks/Electron Framework.framework/Electron Framework")
+  : join(APP_PATH, "QClaw.exe");
+
+if (!existsSync(ASAR_PATH)) {
+  console.error(`ERROR: QClaw not found at ${ASAR_PATH}`);
+  process.exit(1);
+}
 
 // Check Node version >= 22 (required by @electron/asar)
 const nodeVersion = parseInt(process.versions.node.split(".")[0]);
@@ -13,13 +34,20 @@ if (nodeVersion < 22) {
   process.exit(1);
 }
 
-// Check if QClaw is running
+// Stop QClaw if running
 let wasRunning = false;
 try {
-  execSync("pgrep -f QClaw", { stdio: "ignore" });
-  wasRunning = true;
-  console.log("==> QClaw is running, stopping...");
-  try { execSync("pkill -f QClaw"); } catch {}
+  if (isMac) {
+    execSync("pgrep -f QClaw", { stdio: "ignore" });
+    wasRunning = true;
+    console.log("==> QClaw is running, stopping...");
+    try { execSync("pkill -f QClaw"); } catch {}
+  } else {
+    execSync("tasklist /FI \"IMAGENAME eq QClaw.exe\" | findstr QClaw.exe", { stdio: "ignore" });
+    wasRunning = true;
+    console.log("==> QClaw is running, stopping...");
+    try { execSync("taskkill /F /IM QClaw.exe", { stdio: "ignore" }); } catch {}
+  }
   execSync("sleep 1");
 } catch {}
 
@@ -40,7 +68,7 @@ try {
   let targetFile = "";
   for (const file of jsFiles) {
     const content = readFileSync(join(assetsDir, file), "utf8");
-    if (content.includes("inviteCodeVerified") || content.includes("showInviteCodeModal") || content.includes("is-invite-verified")) {
+    if (content.includes("inviteCodeVerified")) {
       targetFile = join(assetsDir, file);
       break;
     }
@@ -98,12 +126,11 @@ try {
   console.log("==> Replacing app.asar...");
   cpSync(join(workDir, "app-patched.asar"), ASAR_PATH);
 
-  // Disable Electron's asar integrity validation fuse
-  const electronBin = join(APP_PATH, "Contents/Frameworks/Electron Framework.framework/Electron Framework");
+  // Disable Electron's asar integrity validation fuse (if enabled)
   const FUSE_SENTINEL = "dL7pKGdnNz796PbbjQWNKmHXBZaB9tsX";
   const FUSE_ASAR_INTEGRITY_INDEX = 4;
 
-  const bin = Buffer.from(readFileSync(electronBin));
+  const bin = Buffer.from(readFileSync(ELECTRON_BIN));
   const sentinelPos = bin.indexOf(FUSE_SENTINEL);
   if (sentinelPos === -1) {
     console.error("ERROR: Could not find Electron fuse sentinel");
@@ -113,20 +140,26 @@ try {
   const fuseOffset = sentinelPos + FUSE_SENTINEL.length + 2 + FUSE_ASAR_INTEGRITY_INDEX;
   if (bin[fuseOffset] === 0x31) { // '1' = enabled
     bin[fuseOffset] = 0x30;       // '0' = disabled
-    writeFileSync(electronBin, bin);
+    writeFileSync(ELECTRON_BIN, bin);
     console.log("==> Disabled asar integrity validation fuse");
   }
 
-  // Re-sign the app (required after modifying binary/asar)
-  console.log("==> Re-signing app...");
-  execSync(`codesign --remove-signature "${APP_PATH}"`, { stdio: "inherit" });
-  execSync(`codesign --force --deep --sign - "${APP_PATH}"`, { stdio: "inherit" });
+  // macOS: re-sign the app (required after modifying binary/asar)
+  if (isMac) {
+    console.log("==> Re-signing app...");
+    execSync(`codesign --remove-signature "${APP_PATH}"`, { stdio: "inherit" });
+    execSync(`codesign --force --deep --sign - "${APP_PATH}"`, { stdio: "inherit" });
+  }
 
   console.log("==> Done!");
 
   if (wasRunning) {
     console.log("==> Restarting QClaw...");
-    execSync(`open "${APP_PATH}"`);
+    if (isMac) {
+      execSync(`open "${APP_PATH}"`);
+    } else {
+      execSync(`start "" "${join(APP_PATH, "QClaw.exe")}"`, { stdio: "ignore" });
+    }
   }
 } catch (err) {
   console.error(err);
