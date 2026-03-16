@@ -61,13 +61,33 @@ if (nodeVersion < 22) {
       wasRunning = true;
       console.log("==> QClaw is running, stopping...");
       try { execSync("pkill -f QClaw"); } catch {}
+      execSync("sleep 1");
     } else {
+      // Windows: check if process is running
       execSync("tasklist /FI \"IMAGENAME eq QClaw.exe\" | findstr QClaw.exe", { stdio: "ignore" });
       wasRunning = true;
       console.log("==> QClaw is running, stopping...");
-      try { execSync("taskkill /F /IM QClaw.exe", { stdio: "ignore" }); } catch {}
+
+      // Try to kill process with retry mechanism
+      for (let i = 0; i < 3; i++) {
+        try {
+          execSync("taskkill /F /IM QClaw.exe", { stdio: "ignore" });
+        } catch {}
+
+        // Check if process is still running
+        try {
+          execSync("tasklist /FI \"IMAGENAME eq QClaw.exe\" | findstr QClaw.exe", { stdio: "ignore" });
+          // Process still running, wait and retry
+          execSync("powershell -Command \"Start-Sleep -Seconds 1\"");
+        } catch {
+          // Process not found, successfully killed
+          break;
+        }
+      }
+
+      // Wait for file handles to be released
+      execSync("powershell -Command \"Start-Sleep -Seconds 1\"");
     }
-    execSync("sleep 1");
   } catch {}
 
   // Create temp dir with cleanup
