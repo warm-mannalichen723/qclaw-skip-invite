@@ -208,10 +208,14 @@ if (nodeVersion < 22) {
       }
     }
   } catch (err: any) {
-    if (isWin && err?.code === "EPERM") {
-      console.error("\nERROR: 权限不足，无法写入 QClaw 安装目录。");
+    if (isWin && (err?.code === "EPERM" || err?.code === "EBUSY")) {
+      console.error("\n错误：权限不足，无法写入 QClaw 安装目录。");
       console.error("请以管理员身份运行终端后重试：");
       console.error("  右键点击终端 → 以管理员身份运行 → 重新执行命令");
+    } else if (isWin && err?.code === "EIO") {
+      console.error("\n错误：QClaw 文件被占用，无法写入。");
+      console.error("请先彻底关闭 QClaw（检查系统托盘），然后重试。");
+      console.error("如果仍然失败，请以管理员身份运行终端后重试。");
     } else {
       console.error(err);
     }
