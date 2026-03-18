@@ -32,7 +32,8 @@ jobs:
           $knownHash = ""
           $hashFile = ".github/qclaw-known-hash.txt"
           if (Test-Path $hashFile) {
-            $knownHash = (Get-Content $hashFile -Raw).Trim()
+            $raw = Get-Content $hashFile -Raw
+            if ($raw) { $knownHash = $raw.Trim() }
           }
           if ($knownHash -eq $env:CURRENT_HASH -and $knownHash -ne "") {
             echo "changed=false" >> $env:GITHUB_OUTPUT
