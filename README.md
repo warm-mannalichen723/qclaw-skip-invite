@@ -4,7 +4,7 @@
 
 ## 支持
 
-- QClaw v0.1.9+（macOS / Windows）
+- QClaw v0.1.9.0+（macOS / Windows）
 
 ## 前置要求
 
